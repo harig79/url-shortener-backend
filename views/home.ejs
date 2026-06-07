@@ -1,47 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShortLink — Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f4f4f5; color: #111; }
+    header { background: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+    header h1 { font-size: 1.2rem; color: #6366f1; font-weight: 700; }
+    header span { font-size: 0.88rem; color: #555; }
+    header a { font-size: 0.88rem; color: #ef4444; text-decoration: none; margin-left: 1rem; }
+    .container { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 2rem; }
+    .card h2 { font-size: 1rem; margin-bottom: 1rem; color: #374151; }
+    .form-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .form-row input { flex: 1; min-width: 200px; padding: 0.6rem 0.8rem; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; outline: none; }
+    .form-row input:focus { border-color: #6366f1; }
+    .form-row input[name="expiryDays"] { max-width: 130px; flex: none; }
+    .form-row button { padding: 0.6rem 1.4rem; background: #6366f1; color: #fff; border: none; border-radius: 6px; font-size: 0.95rem; cursor: pointer; }
+    .form-row button:hover { background: #4f46e5; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { text-align: left; padding: 0.6rem 0.8rem; color: #6b7280; font-weight: 600; border-bottom: 2px solid #f3f4f6; }
+    td { padding: 0.7rem 0.8rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    .short-link { color: #6366f1; text-decoration: none; font-weight: 500; }
+    .short-link:hover { text-decoration: underline; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 0.78rem; background: #ede9fe; color: #5b21b6; }
+    .analytics-btn { font-size: 0.8rem; padding: 3px 10px; border: 1px solid #6366f1; border-radius: 5px; color: #6366f1; text-decoration: none; }
+    .analytics-btn:hover { background: #6366f1; color: #fff; }
+    .empty { text-align: center; color: #9ca3af; padding: 2rem; }
+    .expiry { font-size: 0.8rem; color: #9ca3af; }
+  </style>
 </head>
 <body>
-    <h1>URL SHORTENER</h1>
+
+  <header>
+    <h1>ShortLink</h1>
     <div>
-        <form method = "POST" action = "/url">
-            <label>Enter Your Original URL</label>
-            <input type = "text" name = "redirectUrl" placeholder="https://www.example.com" />
-            <button type = "submit" >Generate</button>
-        </form>
+      <span><%= user.email %></span>
+      <a href="/user/logout">Logout</a>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Shorten a URL</h2>
+      <form method="POST" action="/url">
+        <div class="form-row">
+          <input type="text" name="redirectUrl" placeholder="https://your-long-url.com" required />
+          <input type="number" name="expiryDays" placeholder="Expiry (days)" min="1" max="365" value="30" />
+          <button type="submit">Generate</button>
+        </div>
+      </form>
     </div>
 
-    <% if (id) { %>
-        <p>URL GENERATED: http://localhost:8001/<%= id %></p>
-      <% } %>
-      
+    <div class="card">
+      <h2>Your Links</h2>
       <% if (urls && urls.length > 0) { %>
         <table>
           <thead>
             <tr>
-              <th>S.No</th>
-              <th>ShortId</th>
-              <th>Redirect</th>
+              <th>#</th>
+              <th>Short Link</th>
+              <th>Original URL</th>
               <th>Clicks</th>
+              <th>Expires</th>
+              <th>Analytics</th>
             </tr>
           </thead>
           <tbody>
             <% urls.forEach((url, index) => { %>
               <tr>
                 <td><%= index + 1 %></td>
-                <td><%= url.shortId %></td>
-                <td><%= url.redirectUrl %></td>
-                <td><%= url.visitHistory.length %></td>
+                <td>
+                  <a class="short-link" href="/<%= url.shortId %>" target="_blank">
+                    /<%= url.shortId %>
+                  </a>
+                </td>
+                <td style="max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                  <%= url.redirectUrl %>
+                </td>
+                <td><span class="badge"><%= url.visitHistory.length %></span></td>
+                <td class="expiry"><%= new Date(url.expiresAt).toLocaleDateString() %></td>
+                <td>
+                  <a class="analytics-btn" href="/analytics/<%= url.shortId %>">View</a>
+                </td>
               </tr>
             <% }) %>
           </tbody>
         </table>
+      <% } else { %>
+        <p class="empty">No links yet. Create your first one above.</p>
       <% } %>
-      
     </div>
+
+  </div>
 </body>
 </html>

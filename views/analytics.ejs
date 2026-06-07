@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analytics — <%= shortId %></title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f4f4f5; color: #111; }
+    header { background: #fff; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
+    header h1 { font-size: 1.2rem; color: #6366f1; font-weight: 700; }
+    header a { font-size: 0.88rem; color: #6366f1; text-decoration: none; }
+    .container { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    .card { background: #fff; border-radius: 10px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.07); margin-bottom: 1.5rem; }
+    .meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .meta-item label { font-size: 0.78rem; color: #9ca3af; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .meta-item span { font-size: 0.95rem; color: #111; font-weight: 500; }
+    .total { font-size: 2.5rem; font-weight: 700; color: #6366f1; }
+    .total-label { font-size: 0.88rem; color: #6b7280; margin-top: 2px; }
+    .chart-wrap { position: relative; height: 280px; }
+    .no-data { text-align: center; color: #9ca3af; padding: 3rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ShortLink</h1>
+    <a href="/">← Back to Dashboard</a>
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <div class="meta">
+        <div class="meta-item">
+          <label>Short ID</label>
+          <span><%= shortId %></span>
+        </div>
+        <div class="meta-item">
+          <label>Original URL</label>
+          <span style="word-break:break-all;"><%= url.redirectUrl %></span>
+        </div>
+        <div class="meta-item">
+          <label>Created</label>
+          <span><%= new Date(url.createdAt).toLocaleDateString() %></span>
+        </div>
+        <div class="meta-item">
+          <label>Expires</label>
+          <span><%= new Date(url.expiresAt).toLocaleDateString() %></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="total"><%= totalClicks %></div>
+      <div class="total-label">Total Clicks</div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:1rem; margin-bottom:1.2rem; color:#374151;">Clicks Over Time</h2>
+      <% if (totalClicks > 0) { %>
+        <div class="chart-wrap">
+          <canvas id="clickChart"></canvas>
+        </div>
+      <% } else { %>
+        <p class="no-data">No clicks recorded yet. Share your short link to start tracking.</p>
+      <% } %>
+    </div>
+
+  </div>
+
+  <% if (totalClicks > 0) { %>
+  <script>
+    const ctx = document.getElementById("clickChart").getContext("2d");
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: <%- labels %>,
+        datasets: [{
+          label: "Clicks",
+          data: <%- data %>,
+          fill: true,
+          backgroundColor: "rgba(99,102,241,0.1)",
+          borderColor: "#6366f1",
+          borderWidth: 2,
+          pointBackgroundColor: "#6366f1",
+          tension: 0.3,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, ticks: { stepSize: 1 } },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+  </script>
+  <% } %>
+
+</body>
+</html>
