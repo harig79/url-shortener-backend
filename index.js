@@ -48,7 +48,7 @@ app.get("/:shortId", async (req, res) => {
   );
 
   if (!entry) {
-    return res.status(404).send("Short URL not found or has expired.");
+    return res.status(404).render("404");
   }
 
   return res.redirect(entry.redirectUrl);

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — ShortLink</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+    }
+
+    h1 {
+      font-size: clamp(5rem, 18vw, 10rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.25rem;
+    }
+
+    p.sub {
+      font-size: 1.1rem;
+      color: #888;
+      max-width: 420px;
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+    }
+
+    .cards {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      border: 1px solid #222;
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      width: 200px;
+      text-align: left;
+      background: transparent;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: #555; }
+
+    .card .label {
+      display: inline-block;
+      border: 1px solid #333;
+      border-radius: 999px;
+      padding: 0.2rem 0.75rem;
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-bottom: 0.75rem;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover { opacity: 0.8; }
+
+    .btn-primary {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+    }
+
+    .btn-ghost {
+      border: 1px solid #333;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="badge">ShortLink</div>
+
+  <h1>404</h1>
+
+  <p class="sub">
+    This short link doesn't exist or has already expired.
+    It may have been deleted or the URL might be incorrect.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <span class="label">Expired</span>
+      <p>Links are automatically deleted after their expiry date.</p>
+    </div>
+    <div class="card">
+      <span class="label">Mistyped</span>
+      <p>Double-check the short code — it's case-sensitive.</p>
+    </div>
+    <div class="card">
+      <span class="label">Deleted</span>
+      <p>The owner may have removed this link from their account.</p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a href="/" class="btn btn-primary">Go to Dashboard</a>
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+  </div>
+
+</body>
+</html>
